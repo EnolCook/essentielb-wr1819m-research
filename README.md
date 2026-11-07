@@ -54,17 +54,18 @@ sh apply-ipv6-fix.sh          # fix IPv6 on Wi-Fi + lock 5 GHz channel
 sh apply-hardening.sh         # remove 114DNS, Baidu probe, idle VPN daemons, lock vendor accounts
 ```
 
-If you **don't** have root yet, the easiest path is:
+If you **don't** have root yet — **no tools needed, just a browser:**
 
-```sh
-# on your workstation (Linux, macOS, WSL, Git Bash):
-./scripts/webadmin-to-root.sh 192.168.1.100 admin
-```
+1. Download [`artifacts/unlock-root.tar.gz`](artifacts/unlock-root.tar.gz) from this repo.
+2. Open `http://192.168.1.100` → log in (default: `admin` / `admin`).
+3. Go to **System → Backup / Restore** → upload `unlock-root.tar.gz` as a restore.
+4. Wait ~90 s for the reboot, then: `ssh root@192.168.1.100` (password: `ownerroot`).
+5. **Change the password immediately:** `passwd root`
 
-This bootstraps root SSH from just the web admin password — **no opening the case,
-no serial adapter, no flashing**. See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md)
-for the full explanation, or [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md)
-for the hardware (UART serial) method.
+That's it — **no opening the case, no serial adapter, no flashing, no command line**.
+See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) for details, or
+[docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md) for the hardware
+(UART serial) alternative.
 
 ## Open questions / help wanted
 

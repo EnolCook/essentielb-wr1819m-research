@@ -1,6 +1,7 @@
 # Keep private data out of the repo
 *.tgz
 *.tar.gz
+!artifacts/unlock-root.tar.gz
 private/
 *-private.*
 .secret
