@@ -1,12 +1,12 @@
-# Essentiel B WR1819M / ALFA Network AX1800RM — root access & fixes
+# Essentiel B AX 1800 WiFi 6 — root access & fixes
 
 **Get root access on your router in under 2 minutes, with nothing but a
 browser.** Then fix the broken IPv6, slow Wi-Fi, Chinese DNS, and more.
 
-> This covers the **Essentiel B "Routeur essB AX1800"** (model `WR1819M`),
-> a MediaTek MT7621A + MT7915 based router sold by Boulanger (France).
-> Hardware-identical to the **ALFA Network AX1800RM**. Vendor-forked OpenWrt
-> firmware (`WR1819M_Boulange_V03D...`, kernel 4.4.198).
+> **Also known as:** Essentiel B "Routeur essB AX1800", model `WR1819M`,
+> sold by **Boulanger** (France). Hardware-identical to the
+> **ALFA Network AX1800RM**. MediaTek MT7621A + MT7915, vendor-forked
+> OpenWrt firmware (`WR1819M_Boulange_V03D...`, kernel 4.4.198).
 >
 > **This work was done on a device the authors own.** The goal is to let
 > other owners regain full control over hardware they paid for.
