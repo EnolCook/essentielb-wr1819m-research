@@ -157,13 +157,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
   diagnosing the IPv6 bug through UART serial access, security audit, exploit
   discovery, and writing this documentation — was carried out interactively
   using Anthropic's Claude models via [Claude Code](https://claude.com/claude-code).
-  Models used during the session, in order: Claude Sonnet 4, Claude Opus 4,
-  Claude Opus 4.6. The progression to older, less safety-restrictive models
-  was not planned — it happened because newer models increasingly refused to
-  engage with security-adjacent content (writing exploit documentation,
-  discussing credential extraction, documenting the backup-restore
-  vulnerability) despite this being authorized research on a personally-owned
-  device. All findings were validated on real hardware by a human operator.
+  Models used during the session, in order: Claude Sonnet 5.5, Claude Opus
+  4.8, Claude Opus 4.7, Claude Opus 4.6 (main agent), with Claude Sonnet
+  subagents for parallel tasks. The progression to older, less
+  safety-restrictive models was not planned — it happened because newer
+  models increasingly refused to engage with security-adjacent content
+  (writing exploit documentation, discussing credential extraction,
+  documenting the backup-restore vulnerability) despite this being authorized
+  research on a personally-owned device. All findings were validated on real
+  hardware by a human operator.
 
 ## License
 
