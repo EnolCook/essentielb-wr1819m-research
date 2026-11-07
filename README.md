@@ -39,8 +39,8 @@ Each of these is analyzed and, where possible, fixed, in the `docs/` folder.
 | Security audit & hardening | ✅ complete | [docs/04-security-audit.md](docs/04-security-audit.md) |
 | Root access via UART serial | ✅ reproducible procedure | [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md) |
 | Root access via web admin (no hardware!) | ✅ **validated exploit** | [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) |
-| Firmware image format | 🧩 partially documented | [docs/06-firmware-format.md](docs/06-firmware-format.md) |
-| Vendor accounts & hashes | 🔓 documented, crack open | [docs/07-vendor-accounts.md](docs/07-vendor-accounts.md) |
+| Firmware image format | 🧩 reference notes | [docs/06-firmware-format.md](docs/06-firmware-format.md) |
+| Vendor accounts & hashes | 🧩 reference notes | [docs/07-vendor-accounts.md](docs/07-vendor-accounts.md) |
 | Recovery rescue (U-Boot bypass) | ✅ procedure documented | [docs/09-recovery-rescue.md](docs/09-recovery-rescue.md) |
 
 ## Quick start
@@ -60,33 +60,28 @@ If you **don't** have root yet — **no tools needed, just a browser:**
 2. Open `http://192.168.1.100` → log in (default: `admin` / `admin`).
 3. Go to **System → Backup / Restore** → upload `unlock-root.tar.gz` as a restore.
 4. Wait ~90 s for the reboot, then: `ssh root@192.168.1.100` (password: `ownerroot`).
-5. **Change the password immediately:** `passwd root`
+5. **Change the password immediately:** run `passwd root` and pick something strong.
+
+> **The default password `ownerroot` is public and identical for everyone
+> using this file. Anyone on your LAN could SSH in if you don't change it.
+> Do it right after your first login.**
 
 That's it — **no opening the case, no serial adapter, no flashing, no command line**.
 See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) for details, or
 [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md) for the hardware
 (UART serial) alternative.
 
-## Open questions / help wanted
+## Help wanted
 
-Two open items where contributions from other owners would be useful:
+The main contribution we need:
 
-1. **Crack the vendor `mtc` account password.**
-   The `mtc` account is UID 0 with `/bin/ash` shell and is baked into every unit shipped
-   with firmware `WR1819M_Boulange_V03D20210729154700_fr_B1559_01`.
-   If someone cracks the md5crypt hash in [`artifacts/rom-shadow-hashes.txt`](artifacts/rom-shadow-hashes.txt),
-   `ssh mtc@<router>` becomes a universal root entry point — **no case opening, no exploit needed**.
-2. **Reverse-engineer `/sbin/mtc_upgrade`.**
-   This 4 KB MIPSEL ELF binary ([`artifacts/mtc_upgrade.elf`](artifacts/mtc_upgrade.elf))
-   is the gatekeeper for firmware uploads: it validates a custom "mtc header" prepended
-   to every vendor image. Understanding that header format would allow building a
-   modified `.bin` that the vendor's *System → Upgrade firmware* UI accepts.
+- **Confirm on other units / builds.** Everything here was validated on one unit
+  running `WR1819M_Boulange_V03D20210729154700_fr_B1559_01`. If you have a
+  different build (newer Boulanger firmware, ALFA-branded AX1800RM, another
+  rebrand), please open an issue with `sha256sum /dev/mtd3` and the firmware
+  string from the web UI — this helps us track variants.
 
-> **Note:** the web→root escalation (item 3 in the original wish list) has been
-> **found and validated** — see [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md).
-> A ready-to-use script is at [`scripts/webadmin-to-root.sh`](scripts/webadmin-to-root.sh).
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## Disclaimers
 
