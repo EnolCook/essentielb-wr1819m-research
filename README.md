@@ -57,9 +57,9 @@ sh apply-hardening.sh         # remove 114DNS, Baidu probe, idle VPN daemons, lo
 If you **don't** have root yet — **no tools needed, just a browser:**
 
 1. Download [`artifacts/unlock-root.tar.gz`](artifacts/unlock-root.tar.gz) from this repo.
-2. Open `http://192.168.1.100` → log in (default: `admin` / `admin`).
+2. Open `http://192.168.1.1` → log in (default: `admin` / `admin`).
 3. Go to **System → Backup / Restore** → upload `unlock-root.tar.gz` as a restore.
-4. Wait ~90 s for the reboot, then: `ssh root@192.168.1.100` (password: `ownerroot`).
+4. Wait ~90 s for the reboot, then: `ssh root@192.168.1.1` (password: `ownerroot`).
 5. **Change the password immediately:** run `passwd root` and pick something strong.
 
 > **The default password `ownerroot` is public and identical for everyone

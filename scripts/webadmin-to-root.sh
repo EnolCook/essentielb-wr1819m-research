@@ -9,7 +9,7 @@
 #   ./webadmin-to-root.sh [ROUTER_IP] [ADMIN_PASSWORD] [ROOT_PASSWORD]
 #
 # Defaults:
-#   ROUTER_IP      = 192.168.1.100
+#   ROUTER_IP      = 192.168.1.1
 #   ADMIN_PASSWORD = admin   (stock default)
 #   ROOT_PASSWORD  = (generated randomly if not provided)
 #
@@ -18,7 +18,7 @@
 
 set -e
 
-ROUTER="${1:-192.168.1.100}"
+ROUTER="${1:-192.168.1.1}"
 ADMIN_PASS="${2:-admin}"
 ROOT_PASS="${3:-}"
 
