@@ -1,12 +1,32 @@
 # Root access via UART serial (the hardware path)
 
-Until the [open questions](../README.md#open-questions-help-wanted) are solved
-(mtc password cracked, mtc_upgrade reversed, or web→root exploit found), the
-only known way to get a root shell on the stock firmware is to attach a USB-TTL
-serial adapter to the on-board UART header and enter OpenWrt failsafe.
+> **Most people don't need this.** The easiest way to get root is the
+> [web admin method](08-web-to-root-exploit.md) — no hardware required.
+> This page documents the UART serial path for reference, recovery, or if
+> the web method doesn't work on your firmware version.
 
-This is cheap (~€4 adapter) but requires opening the case and, depending on the
-header type, a few drops of solder.
+This method uses a USB-TTL serial adapter (~€4) wired to the on-board UART
+header. It requires opening the case and, depending on the header type, a few
+drops of solder.
+
+```
+  ┌─────────────────────────────────────────┐
+  │              WR1819M  PCB               │
+  │                                         │
+  │   J4                                    │
+  │   ┌───┬───┬───┬───┐                    │
+  │   │VCC│ RX│ TX│GND│  ← silkscreened    │
+  │   └─┬─┴─┬─┴─┬─┴─┬─┘                    │
+  │     │   │   │   │                       │
+  └─────│───│───│───│───────────────────────┘
+        ×   │   │   │    VCC = do NOT connect
+            │   │   │
+        ┌───┘   │   └───┐
+        │       │       │
+  USB-TTL adapter:
+        TXD    RXD     GND
+       (cross over TX↔RX)
+```
 
 ## What you need
 
