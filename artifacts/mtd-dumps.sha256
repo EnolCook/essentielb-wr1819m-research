@@ -1,0 +1,18 @@
+# SHA256 of the stock mtd partition dumps from a unit running firmware
+# WR1819M_Boulange_V03D20210729154700_fr_B1559_01.
+#
+# These are reference checksums only — the actual partition binaries are not
+# included in this repository (they contain the vendor firmware image, which
+# we do not redistribute).
+#
+# To reproduce on your own device:
+#   dd if=/dev/mtd3 of=fw.bin bs=65536   # mtd3 = "firmware" (FIT image)
+#   dd if=/dev/mtd0 of=bl.bin bs=4096    # mtd0 = "Bootloader" (U-Boot)
+#   sha256sum fw.bin bl.bin
+#
+# If your sums match the ones below, you're on exactly the same firmware
+# revision, and every observation and hash in this repo applies to you
+# verbatim.
+
+be8a72624290ae875a2f2842133d92f9d8c831861e9cdcb7fcff24a19348e783 *fw.bin
+b5382efa3f3ce899996195a9e92bd725f70862f722f79c1564fd081051b02e88 *bl.bin

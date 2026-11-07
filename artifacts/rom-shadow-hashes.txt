@@ -1,0 +1,28 @@
+# /rom/etc/shadow (universal across all WR1819M units flashed with firmware
+# build WR1819M_Boulange_V03D20210729154700_fr_B1559_01)
+#
+# Format:  user:hash
+# Hash format: md5crypt ($1$) — hashcat mode 500.
+#
+# The salted hashes below are safe to publish: they come from the stock,
+# publicly-shipping firmware image. Any owner of the device can read them
+# locally from /rom/etc/shadow and /rom/etc/passwd. Cracking them reveals
+# the universal vendor password for that account, which is the goal here —
+# see docs/07-vendor-accounts.md for context.
+
+# Primary target: UID 0, shell is /bin/ash, SSH password auth enabled
+# ssh mtc@<any WR1819M> would work with this plaintext.
+mtc:$1$cGxiTn6s$k6NTy/dSuGwmz6CF4ZKx9.
+
+# Secondary: UID 0 but shell is /bin/false in the stock passwd.
+# Cracking this is still interesting (confirms per-unit vs universal pattern,
+# usable after a shell swap in failsafe) but less immediately exploitable.
+root:$1$RQTh1mP9$EY63rRwvVeNTNDtMRAXzg0
+
+# Tertiary: baked into /rom/etc/passwd (not /etc/shadow), UID 0, /bin/false.
+user:$1$d87shxEL$qEIMdCo0Xp9h3xb8TtiII/
+
+# For hashcat convenience, the hashes alone (strip the "user:" prefix):
+#   $1$cGxiTn6s$k6NTy/dSuGwmz6CF4ZKx9.
+#   $1$RQTh1mP9$EY63rRwvVeNTNDtMRAXzg0
+#   $1$d87shxEL$qEIMdCo0Xp9h3xb8TtiII/
