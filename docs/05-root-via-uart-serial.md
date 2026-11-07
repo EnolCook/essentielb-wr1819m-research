@@ -9,24 +9,7 @@ This method uses a USB-TTL serial adapter (~€4) wired to the on-board UART
 header. It requires opening the case and, depending on the header type, a few
 drops of solder.
 
-```
-  ┌─────────────────────────────────────────┐
-  │              WR1819M  PCB               │
-  │                                         │
-  │   J4                                    │
-  │   ┌───┬───┬───┬───┐                    │
-  │   │VCC│ RX│ TX│GND│  ← silkscreened    │
-  │   └─┬─┴─┬─┴─┬─┴─┬─┘                    │
-  │     │   │   │   │                       │
-  └─────│───│───│───│───────────────────────┘
-        ×   │   │   │    VCC = do NOT connect
-            │   │   │
-        ┌───┘   │   └───┐
-        │       │       │
-  USB-TTL adapter:
-        TXD    RXD     GND
-       (cross over TX↔RX)
-```
+![J4 UART header on the WR1819M PCB](../images/j4-uart-header.png)
 
 ## What you need
 
