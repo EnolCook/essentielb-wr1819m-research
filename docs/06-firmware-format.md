@@ -30,9 +30,9 @@ description. No vendor magic in there.
 An image **accepted by the vendor's web upgrade UI** is **not** the raw FIT image
 above. It is `[opaque mtc header] + [FIT image]`.
 
-The gatekeeper is **`/sbin/mtc_upgrade`** — a 4 KB MIPSEL ELF binary provided
-in [`artifacts/mtc_upgrade.elf`](../artifacts/mtc_upgrade.elf). Its symbol table
-exposes:
+The gatekeeper is **`/sbin/mtc_upgrade`** — a 4 KB MIPSEL ELF binary on the
+device (extract it with `scp root@192.168.1.1:/sbin/mtc_upgrade .` once you
+have root). Its symbol table exposes:
 
 | Entrypoint | Underlying C function | Role |
 |---|---|---|

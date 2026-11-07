@@ -29,11 +29,11 @@ The following are not needed for root access (the tarball method is simpler
 and safer), but are documented as research artifacts for the curious:
 
 - **Vendor `mtc` account hash** — md5crypt, uncracked. See
-  [`artifacts/rom-shadow-hashes.txt`](artifacts/rom-shadow-hashes.txt) and
-  [docs/07-vendor-accounts.md](docs/07-vendor-accounts.md).
-- **`mtc_upgrade` header format** — the 4 KB MIPSEL ELF at
-  [`artifacts/mtc_upgrade.elf`](artifacts/mtc_upgrade.elf) validates vendor
-  firmware images. See [docs/06-firmware-format.md](docs/06-firmware-format.md).
+  [docs/07-vendor-accounts.md](docs/07-vendor-accounts.md) for details
+  (extract the hash from your own device with `cat /etc/shadow`).
+- **`mtc_upgrade` header format** — a 4 KB MIPSEL ELF at `/sbin/mtc_upgrade`
+  on the device validates vendor firmware images. See
+  [docs/06-firmware-format.md](docs/06-firmware-format.md).
 
 ## Style
 

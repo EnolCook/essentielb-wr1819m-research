@@ -46,8 +46,8 @@ on the device sticker or `admin`/`admin` defaults. It is not a `/rom` entry
 and is not universal — each unit has its own `admin` hash after the user
 changes the password.
 
-See [`artifacts/rom-shadow-hashes.txt`](../artifacts/rom-shadow-hashes.txt) for
-the universal hashes above in ready-to-feed form for hashcat.
+To extract these hashes from your own device, run `cat /etc/shadow` as root
+and look for the `mtc`, `root` and `user` entries.
 
 ## Why `mtc` is the valuable target
 
