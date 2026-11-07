@@ -38,9 +38,10 @@ Each of these is analyzed and, where possible, fixed, in the `docs/` folder.
 | Slow 5 GHz boot & fix | ✅ complete | [docs/03-wifi-slow-boot.md](docs/03-wifi-slow-boot.md) |
 | Security audit & hardening | ✅ complete | [docs/04-security-audit.md](docs/04-security-audit.md) |
 | Root access via UART serial | ✅ reproducible procedure | [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md) |
-| Root access without opening the case | 🔧 in progress — see [open questions](#open-questions) | — |
+| Root access via web admin (no hardware!) | ✅ **validated exploit** | [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) |
 | Firmware image format | 🧩 partially documented | [docs/06-firmware-format.md](docs/06-firmware-format.md) |
 | Vendor accounts & hashes | 🔓 documented, crack open | [docs/07-vendor-accounts.md](docs/07-vendor-accounts.md) |
+| Recovery rescue (U-Boot bypass) | ✅ procedure documented | [docs/09-recovery-rescue.md](docs/09-recovery-rescue.md) |
 
 ## Quick start
 
@@ -53,12 +54,21 @@ sh apply-ipv6-fix.sh          # fix IPv6 on Wi-Fi + lock 5 GHz channel
 sh apply-hardening.sh         # remove 114DNS, Baidu probe, idle VPN daemons, lock vendor accounts
 ```
 
-If you **don't** have root yet, see [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md)
-for the current (hardware-opening) method.
+If you **don't** have root yet, the easiest path is:
+
+```sh
+# on your workstation (Linux, macOS, WSL, Git Bash):
+./scripts/webadmin-to-root.sh 192.168.1.100 admin
+```
+
+This bootstraps root SSH from just the web admin password — **no opening the case,
+no serial adapter, no flashing**. See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md)
+for the full explanation, or [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md)
+for the hardware (UART serial) method.
 
 ## Open questions / help wanted
 
-Three open items where contributions from other owners would be very useful:
+Two open items where contributions from other owners would be useful:
 
 1. **Crack the vendor `mtc` account password.**
    The `mtc` account is UID 0 with `/bin/ash` shell and is baked into every unit shipped
@@ -69,14 +79,11 @@ Three open items where contributions from other owners would be very useful:
    This 4 KB MIPSEL ELF binary ([`artifacts/mtc_upgrade.elf`](artifacts/mtc_upgrade.elf))
    is the gatekeeper for firmware uploads: it validates a custom "mtc header" prepended
    to every vendor image. Understanding that header format would allow building a
-   modified `.bin` (= original + known root password) that the vendor's own
-   *System → Upgrade firmware* UI accepts — the cleanest possible delivery for
-   non-technical owners.
-3. **Find a web→root escalation path in the vendor LuCI.**
-   The web UI runs as root; most of these cheap-ODM firmwares expose at least one
-   command-injection or insecure-upload endpoint. See
-   [docs/06-firmware-format.md](docs/06-firmware-format.md) for what we know about the
-   LuCI handlers.
+   modified `.bin` that the vendor's *System → Upgrade firmware* UI accepts.
+
+> **Note:** the web→root escalation (item 3 in the original wish list) has been
+> **found and validated** — see [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md).
+> A ready-to-use script is at [`scripts/webadmin-to-root.sh`](scripts/webadmin-to-root.sh).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
 
@@ -84,8 +91,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
 
 - Everything here was tested on a single unit. Your build revision may differ.
 - Opening the case and flashing modified firmware **can brick the device.**
-  We document a recovery path (UART+failsafe) but it requires the same hardware you
-  were trying to avoid in the first place.
+  We document a recovery path via U-Boot console
+  ([docs/09-recovery-rescue.md](docs/09-recovery-rescue.md)) but it requires a
+  USB-TTL serial adapter wired to the PCB header.
 - This repository contains no proprietary vendor firmware binaries. Only the small
   utility binary needed for reverse-engineering (`mtc_upgrade`, 4 KB) and the stock
   `/etc/shadow` hashes (which are in-ROM and identical on every unit of the same

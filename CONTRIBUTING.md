@@ -33,18 +33,13 @@ A `docs/06a-mtc-header-format.md` describing the header, or a
 `scripts/build-mtc-header.py` that produces a valid header for an arbitrary
 payload, would be excellent contributions.
 
-## 3. Find a web→root escalation in the vendor LuCI
+## 3. ~~Find a web→root escalation in the vendor LuCI~~ — DONE
 
-The web UI runs as root, so any command-injection in a `cgi-bin` handler or
-insecure file-write primitive is enough. Likely spots:
-
-- Vendor custom controllers under `/usr/lib/lua/luci/controller/admin_mtk/`
-  and `/usr/lib/lua/luci/mtc/`.
-- Config-restore endpoints that write to disk.
-- Diagnostic endpoints (ping, traceroute) that shell out.
-
-If you're testing without having root first, work on a device you own and keep
-a serial adapter nearby in case you need to recover.
+**Found and validated.** The LuCI backup-restore endpoint extracts any
+uploaded tarball as root with zero validation. See
+[docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) and the
+ready-to-use script at
+[scripts/webadmin-to-root.sh](scripts/webadmin-to-root.sh).
 
 ## 4. Confirm on other units / builds
 
