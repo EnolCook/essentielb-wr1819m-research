@@ -4,7 +4,7 @@
 
 | Brand | Market | Product name |
 |---|---|---|
-| **Essentiel B** (Boulanger house brand) | France | *Routeur essB AX1800* |
+| **EssentielB** (Boulanger house brand) | France | *Routeur essB AX1800* |
 | **ALFA Network** | International | **AX1800RM** |
 
 Both brands ship the **same hardware**. The vendor firmware and some default
