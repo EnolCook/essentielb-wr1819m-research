@@ -73,33 +73,62 @@ See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) for details
 
 ## How we got here
 
-Finding a way to give every owner root access on this device was a
-multi-step process. Here's the path, in order:
+This started with a simple problem: phones connected to the router kept
+throwing "Network Request Failed" randomly. Here's the full path from that
+bug report to the one-click root access solution.
 
-1. **UART serial console** — opened the case, soldered to header J4, got a
-   root shell via OpenWrt failsafe mode. This gave full access but requires
-   hardware most people don't have.
+1. **The bug** — intermittent "Network Request Failed" on phones connected
+   via Wi-Fi, while Ethernet clients worked fine. Diagnosed as broken IPv6:
+   the router advertises IPv6 via Router Advertisements and DHCPv6, but the
+   global v6 path is dead. Phones prefer IPv6, try it, time out, and fail.
+   The MediaTek Wi-Fi driver's IGMP/MLD snooping silently drops the Neighbor
+   Discovery packets that would let IPv6 work properly.
+   ([docs/02](docs/02-ipv6-bug.md))
+
+2. **The wall** — the fix requires disabling RA/DHCPv6 and the Wi-Fi
+   snooping, both of which need a root shell. The web admin UI doesn't
+   expose these settings. SSH is running but the `root`, `mtc` and `user`
+   accounts all have unknown passwords. There is no documented way in.
+
+3. **Trying the obvious** — default credentials (`admin`/`admin`,
+   `root`/`root`, `root`/`admin`, etc.): no luck on SSH. The web UI
+   password (`admin`/`admin`) works but only gives access to the LuCI
+   interface, not a shell. Searched forums, vendor docs, FCC filings — no
+   root procedure exists publicly for this device.
+
+4. **UART serial console** — opened the case, found header J4 with
+   silkscreened VCC/RX/TX/GND, wired a CH340G USB-TTL adapter, entered
+   OpenWrt failsafe mode. Got a root shell. Fixed the IPv6 bug, fixed the
+   slow 5 GHz channel, ran a security audit (found Chinese DNS, Baidu
+   connectivity probe, idle VPN daemons, undocumented UID-0 accounts),
+   hardened everything.
    ([docs/05](docs/05-root-via-uart-serial.md))
 
-2. **Vendor account password crack** — the firmware ships with a UID-0
-   account `mtc` that has SSH access. We tried ~1700 targeted candidates +
-   rockyou with hashcat rules. No luck — the md5crypt hash resists.
-   ([docs/07](docs/07-vendor-accounts.md))
+5. **Making it accessible to everyone** — UART works but requires opening
+   the case and a serial adapter most people don't own. We tried three
+   paths to give root access without hardware:
 
-3. **Modified firmware .bin** — we dumped the SPI flash and tried to build a
-   custom firmware image with a known root password. Blocked by the vendor's
-   proprietary "mtc header" format that the upgrade UI validates — the 4 KB
-   gatekeeper binary has not been reversed yet.
-   ([docs/06](docs/06-firmware-format.md))
+   - **Crack the vendor `mtc` password** — the account is UID 0 with SSH
+     access, baked into every unit. Tried ~1700 targeted candidates +
+     rockyou with hashcat rules. No luck — the md5crypt hash still stands.
+     ([docs/07](docs/07-vendor-accounts.md))
 
-4. **Web admin → root exploit** — audited the LuCI web handlers from the root
-   shell we had via UART. Found that the backup-restore endpoint runs
-   `tar -C / -xzf` on any uploaded file with zero validation. One tarball
-   upload = arbitrary file write as root = game over.
-   ([docs/08](docs/08-web-to-root-exploit.md))
+   - **Build a modified firmware .bin** — dump the flash, inject a known
+     root password, reflash via the web upgrade UI. Blocked: the vendor
+     uses a proprietary "mtc header" that a 4 KB gatekeeper binary
+     validates with CRC32. Header format not reversed.
+     ([docs/06](docs/06-firmware-format.md))
 
-Step 4 is what ships as `unlock-root.tar.gz` — it makes steps 1–3 unnecessary
-for anyone who just wants root on their own router.
+   - **Audit the web UI for a shortcut** — using the root shell from step
+     4, read the LuCI source code. Found that the backup-restore endpoint
+     runs `tar -C / -xzf` on any uploaded archive with **zero validation**.
+     One tarball upload = arbitrary file write as root = game over.
+     ([docs/08](docs/08-web-to-root-exploit.md))
+
+6. **The solution** — that last finding is what ships as
+   `unlock-root.tar.gz`. Upload it through the web UI, reboot, SSH in.
+   No hardware, no flashing, no command line. The two other paths
+   (password crack, firmware mod) became irrelevant.
 
 ## Help wanted
 
