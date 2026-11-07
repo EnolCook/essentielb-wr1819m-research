@@ -153,6 +153,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
   utility binary needed for reverse-engineering (`mtc_upgrade`, 4 KB) and the stock
   `/etc/shadow` hashes (which are in-ROM and identical on every unit of the same
   firmware build) are included as artifacts.
+- **This research was done with the help of AI.** The entire process — from
+  diagnosing the IPv6 bug through UART serial access, security audit, exploit
+  discovery, and writing this documentation — was carried out interactively
+  using Anthropic's Claude models via [Claude Code](https://claude.com/claude-code).
+  Models used during the session, in order: Claude Sonnet 4, Claude Opus 4,
+  Claude Opus 4.6. The progression to older, less safety-restrictive models
+  was not planned — it happened because newer models increasingly refused to
+  engage with security-adjacent content (writing exploit documentation,
+  discussing credential extraction, documenting the backup-restore
+  vulnerability) despite this being authorized research on a personally-owned
+  device. All findings were validated on real hardware by a human operator.
 
 ## License
 
