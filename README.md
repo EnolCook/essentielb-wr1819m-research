@@ -71,6 +71,36 @@ See [docs/08-web-to-root-exploit.md](docs/08-web-to-root-exploit.md) for details
 [docs/05-root-via-uart-serial.md](docs/05-root-via-uart-serial.md) for the hardware
 (UART serial) alternative.
 
+## How we got here
+
+Finding a way to give every owner root access on this device was a
+multi-step process. Here's the path, in order:
+
+1. **UART serial console** — opened the case, soldered to header J4, got a
+   root shell via OpenWrt failsafe mode. This gave full access but requires
+   hardware most people don't have.
+   ([docs/05](docs/05-root-via-uart-serial.md))
+
+2. **Vendor account password crack** — the firmware ships with a UID-0
+   account `mtc` that has SSH access. We tried ~1700 targeted candidates +
+   rockyou with hashcat rules. No luck — the md5crypt hash resists.
+   ([docs/07](docs/07-vendor-accounts.md))
+
+3. **Modified firmware .bin** — we dumped the SPI flash and tried to build a
+   custom firmware image with a known root password. Blocked by the vendor's
+   proprietary "mtc header" format that the upgrade UI validates — the 4 KB
+   gatekeeper binary has not been reversed yet.
+   ([docs/06](docs/06-firmware-format.md))
+
+4. **Web admin → root exploit** — audited the LuCI web handlers from the root
+   shell we had via UART. Found that the backup-restore endpoint runs
+   `tar -C / -xzf` on any uploaded file with zero validation. One tarball
+   upload = arbitrary file write as root = game over.
+   ([docs/08](docs/08-web-to-root-exploit.md))
+
+Step 4 is what ships as `unlock-root.tar.gz` — it makes steps 1–3 unnecessary
+for anyone who just wants root on their own router.
+
 ## Help wanted
 
 The main contribution we need:
